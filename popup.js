@@ -15,8 +15,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Get all bookmarks and populate the dropdown
   chrome.bookmarks.getTree(function (bookmarks) {
-    const tags = traverseBookmarks(bookmarks);
-    populateDropdown(tags, categorySelect);
+    const { tags, folderNames } = traverseBookmarks(bookmarks);
+    const combinedSet = new Set([...tags, ...folderNames]); // Use a Set to ensure uniqueness
+    const combinedList = Array.from(combinedSet); // Convert back to an array
+    populateDropdown(combinedList, categorySelect);
   });
 
   // Track last used input

@@ -12,17 +12,22 @@ export function extractTags(bookmark) {
   return tags;
 }
 
-// Function to traverse bookmarks and extract tags
-export function traverseBookmarks(bookmarks, tagsSet = new Set()) {
+// Function to traverse bookmarks and extract tags and folder names
+export function traverseBookmarks(bookmarks, tagsSet = new Set(), folderNamesSet = new Set()) {
   bookmarks.forEach((bookmark) => {
     if (bookmark.children) {
-      traverseBookmarks(bookmark.children, tagsSet);
+      // Add folder name to the set
+      folderNamesSet.add(bookmark.title.toLowerCase());
+      traverseBookmarks(bookmark.children, tagsSet, folderNamesSet);
     } else if (bookmark.title.includes("tags=")) {
       const tags = extractTags(bookmark);
       tags.forEach((tag) => tagsSet.add(tag));
     }
   });
-  return Array.from(tagsSet);
+  return {
+    tags: Array.from(tagsSet),
+    folderNames: Array.from(folderNamesSet)
+  };
 }
 
 // Function to find bookmarks with selected tag or matching string

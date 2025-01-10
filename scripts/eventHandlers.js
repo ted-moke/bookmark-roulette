@@ -50,6 +50,9 @@ export function handleListAllButtonClick(selectedTag, resultElement) {
       return;
     }
 
+    // Sort bookmarks by creation date (assuming you have a way to access it)
+    matchingBookmarks.sort((a, b) => a.dateAdded - b.dateAdded);
+
     // Create a list of all matching bookmarks with delete buttons
     const bookmarksList = matchingBookmarks
       .map(createBookmarkListItem)
