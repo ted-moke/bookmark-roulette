@@ -9,10 +9,9 @@ function shuffleArray(array) {
 }
 
 // Handle roll button click
-export function handleRollButtonClick(categorySelect, resultElement) {
-  const selectedTag = categorySelect.value;
+export function handleRollButtonClick(selectedTag, resultElement) {
   if (!selectedTag) {
-    resultElement.textContent = "Please select a tag first";
+    resultElement.textContent = "Please select a tag or enter a keyword first";
     return;
   }
 
@@ -36,10 +35,9 @@ export function handleRollButtonClick(categorySelect, resultElement) {
 }
 
 // Handle list all button click
-export function handleListAllButtonClick(categorySelect, resultElement) {
-  const selectedTag = categorySelect.value;
+export function handleListAllButtonClick(selectedTag, resultElement) {
   if (!selectedTag) {
-    resultElement.textContent = "Please select a tag first";
+    resultElement.textContent = "Please select a tag or enter a keyword first";
     return;
   }
 
@@ -72,7 +70,7 @@ export function handleListAllButtonClick(categorySelect, resultElement) {
         const bookmarkId = this.getAttribute('data-id');
         deleteBookmark(bookmarkId);
         // Refresh the list after deletion
-        handleListAllButtonClick(categorySelect, resultElement);
+        handleListAllButtonClick(selectedTag, resultElement);
       });
     });
   });
