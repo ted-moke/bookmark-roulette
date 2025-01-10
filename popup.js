@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const categorySelect = document.getElementById("categorySelect");
   const rollButton = document.getElementById("rollButton");
   const resultElement = document.getElementById("result");
+  const listAllButton = document.getElementById("listAllButton");
 
   // Function to extract tags from a bookmark's URL or title
   function extractTags(bookmark) {
@@ -95,9 +96,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Add after the roll button event listener
-  const listAllButton = document.getElementById("listAllButton");
-
   // Handle list all button click
   listAllButton.addEventListener("click", () => {
     const selectedTag = categorySelect.value;
@@ -114,15 +112,37 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      // Create a list of all matching bookmarks
+      // Create a list of all matching bookmarks with delete buttons
       const bookmarksList = matchingBookmarks
-        .map(bookmark => `<li><a href="${bookmark.url}" target="_blank">${bookmark.title}</a></li>`)
+        .map(bookmark => `
+          <li>
+            <a href="${bookmark.url}" target="_blank">${bookmark.title}</a>
+            <button class="delete-button" data-id="${bookmark.id}">Delete</button>
+          </li>
+        `)
         .join('');
       
       resultElement.innerHTML = `
         <p>Found ${matchingBookmarks.length} bookmark${matchingBookmarks.length === 1 ? '' : 's'}:</p>
         <ul>${bookmarksList}</ul>
       `;
+
+      // Add event listeners to delete buttons
+      document.querySelectorAll('.delete-button').forEach(button => {
+        button.addEventListener('click', function() {
+          const bookmarkId = this.getAttribute('data-id');
+          deleteBookmark(bookmarkId);
+        });
+      });
     });
   });
+
+  // Function to delete a bookmark
+  function deleteBookmark(bookmarkId) {
+    chrome.bookmarks.remove(bookmarkId, () => {
+      alert('Bookmark deleted');
+      // Refresh the list after deletion
+      listAllButton.click();
+    });
+  }
 });
