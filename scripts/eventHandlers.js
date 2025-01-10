@@ -1,5 +1,13 @@
 import { findBookmarksWithTag, deleteBookmark } from './bookmarkUtils.js';
 
+// Fisher-Yates shuffle algorithm
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
 // Handle roll button click
 export function handleRollButtonClick(categorySelect, resultElement) {
   const selectedTag = categorySelect.value;
@@ -16,9 +24,11 @@ export function handleRollButtonClick(categorySelect, resultElement) {
       return;
     }
 
-    // Pick a random bookmark
-    const randomIndex = Math.floor(Math.random() * matchingBookmarks.length);
-    const chosenBookmark = matchingBookmarks[randomIndex];
+    // Shuffle the array of matching bookmarks
+    shuffleArray(matchingBookmarks);
+
+    // Pick the first bookmark after shuffling
+    const chosenBookmark = matchingBookmarks[0];
     
     // Create a clickable link
     resultElement.innerHTML = `<a href="${chosenBookmark.url}" target="_blank">${chosenBookmark.title}</a>`;
