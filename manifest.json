@@ -1,0 +1,13 @@
+{
+  "name": "Bookmarks Roulette",
+  "description": "Get a random bookmark in a category",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon-white.png"
+  },
+  "permissions": [
+    "bookmarks"
+  ]
+}
