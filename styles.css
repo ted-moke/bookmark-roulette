@@ -14,7 +14,7 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    min-width: 400px;
+    min-width: 600px;
 }
 
 h1 {
@@ -60,6 +60,12 @@ button:hover {
     text-align: center;
 }
 
+a { 
+    max-width: none;
+    text-decoration: none;
+    color: #ffffff;
+}
+
 a:hover {
     text-decoration: underline;
 }
@@ -77,15 +83,6 @@ li {
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 10px;
-}
-
-li a {
-    flex-grow: 1;
-    color: #ffffff; /* Neon green */
-}
-
-li a:hover {
-    text-decoration: underline;
 }
 
 .delete-button {
@@ -118,4 +115,30 @@ a#listAllLink {
 a#listAllLink:hover {
     color: #2ecc71; /* Slightly darker green */
     border: 1px solid #2ecc71;
+}
+
+#categorySelect, #randomTagButton {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#randomTagButton {
+    padding: 2px 5px; /* Smaller padding for a compact button */
+    margin-left: 5px; /* Space between dropdown and button */
+}
+
+/* Add this CSS to style the container and align its children */
+.dropdown-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#categorySelect {
+    flex-grow: 1;
+}
+
+#randomTagButton {
+    padding: 2px 5px; /* Smaller padding for a compact button */
+    margin-left: 5px; /* Space between dropdown and button */
 } 

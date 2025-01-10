@@ -9,9 +9,12 @@
 <body>
     <h1>Bookmarks Roulette</h1>
     <p>Click the button to roll a random bookmark in a category</p>
-    <select id="categorySelect">
-        <option value="">Select a category</option>
-    </select>
+    <div class="dropdown-container">
+        <select id="categorySelect">
+            <option value="">Select a category</option>
+        </select>
+        <button id="randomTagButton">Rand</button>
+    </div>
     <input type="text" id="categoryInput" placeholder="Enter a keyword manually">
     <button id="rollButton">Roll</button>
     <a href="#" id="listAllLink">List All</a>

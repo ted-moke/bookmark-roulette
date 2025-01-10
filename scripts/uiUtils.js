@@ -21,4 +21,14 @@ export function populateDropdown(tags, categorySelect) {
     option.textContent = tag;
     categorySelect.appendChild(option);
   });
+}
+
+// Function to create a bookmark list item with a delete button
+export function createBookmarkListItem(bookmark) {
+  return `
+    <li>
+      <a href="${bookmark.url}" target="_blank">${bookmark.title}</a>
+      <button class="delete-button" data-id="${bookmark.id}">Delete</button>
+    </li>
+  `;
 } 

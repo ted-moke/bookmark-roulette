@@ -1,4 +1,5 @@
 import { findBookmarksWithTag, deleteBookmark } from './bookmarkUtils.js';
+import { createBookmarkListItem } from './uiUtils.js';
 
 // Fisher-Yates shuffle algorithm
 function shuffleArray(array) {
@@ -29,8 +30,8 @@ export function handleRollButtonClick(selectedTag, resultElement) {
     // Pick the first bookmark after shuffling
     const chosenBookmark = matchingBookmarks[0];
     
-    // Create a clickable link
-    resultElement.innerHTML = `<a href="${chosenBookmark.url}" target="_blank">${chosenBookmark.title}</a>`;
+    // Use the utility function to create the list item
+    resultElement.innerHTML = createBookmarkListItem(chosenBookmark);
   });
 }
 
@@ -51,12 +52,7 @@ export function handleListAllButtonClick(selectedTag, resultElement) {
 
     // Create a list of all matching bookmarks with delete buttons
     const bookmarksList = matchingBookmarks
-      .map(bookmark => `
-        <li>
-          <a href="${bookmark.url}" target="_blank">${bookmark.title}</a>
-          <button class="delete-button" data-id="${bookmark.id}">Delete</button>
-        </li>
-      `)
+      .map(createBookmarkListItem)
       .join('');
     
     resultElement.innerHTML = `

@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const rollButton = document.getElementById("rollButton");
   const resultElement = document.getElementById("result");
   const listAllLink = document.getElementById("listAllLink");
+  const randomTagButton = document.getElementById("randomTagButton");
 
   let lastUsedInput = 'dropdown'; // Default to dropdown
 
@@ -37,5 +38,15 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault(); // Prevent default link behavior
     const selectedTag = lastUsedInput === 'input' ? categoryInput.value.trim() : categorySelect.value;
     handleListAllButtonClick(selectedTag, resultElement);
+  });
+
+  // Add event listener for random tag button
+  randomTagButton.addEventListener("click", () => {
+    const options = Array.from(categorySelect.options).filter(option => option.value);
+    if (options.length > 0) {
+      const randomOption = options[Math.floor(Math.random() * options.length)];
+      categorySelect.value = randomOption.value;
+      lastUsedInput = 'dropdown';
+    }
   });
 });
