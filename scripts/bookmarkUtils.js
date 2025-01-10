@@ -1,10 +1,13 @@
 // Function to extract tags from a bookmark's URL or title
 export function extractTags(bookmark) {
   const tags = [];
-  const regex = /tags=([^,]+)/gi;
+  const regex = /tags=([^&]+)/gi;
   let match;
   while ((match = regex.exec(bookmark.title)) !== null) {
-    tags.push(...match[1].toLowerCase().split(","));
+    // Split the entire matched tag string by comma and trim whitespace
+    const tagString = match[1];
+    const extractedTags = tagString.split(',').map(tag => tag.trim().toLowerCase());
+    tags.push(...extractedTags);
   }
   return tags;
 }

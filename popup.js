@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const categoryInput = document.getElementById("categoryInput");
   const rollButton = document.getElementById("rollButton");
   const resultElement = document.getElementById("result");
-  const listAllButton = document.getElementById("listAllButton");
+  const listAllLink = document.getElementById("listAllLink");
 
   let lastUsedInput = 'dropdown'; // Default to dropdown
 
@@ -33,7 +33,8 @@ document.addEventListener("DOMContentLoaded", function () {
     handleRollButtonClick(selectedTag, resultElement);
   });
 
-  listAllButton.addEventListener("click", () => {
+  listAllLink.addEventListener("click", (event) => {
+    event.preventDefault(); // Prevent default link behavior
     const selectedTag = lastUsedInput === 'input' ? categoryInput.value.trim() : categorySelect.value;
     handleListAllButtonClick(selectedTag, resultElement);
   });

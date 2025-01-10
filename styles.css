@@ -1,0 +1,121 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e;
+    color: #ffffff;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    min-width: 400px;
+}
+
+h1 {
+    color: #39ff14; /* Neon green */
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+p {
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+select, input[type="text"], button, a {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+select, input[type="text"] {
+    background-color: #333333;
+    color: #ffffff;
+}
+
+button {
+    background-color: #39ff14; /* Neon green */
+    color: #1e1e1e;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2ecc71; /* Slightly darker green */
+}
+
+#result {
+    padding-top: 20px;
+    text-align: center;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* background-color: #333333; */
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+li a {
+    flex-grow: 1;
+    color: #ffffff; /* Neon green */
+}
+
+li a:hover {
+    text-decoration: underline;
+}
+
+.delete-button {
+    border: 1px solid #ff4c4c; /* Red for delete */
+    color: #ff4c4c;
+    background-color: transparent;
+    padding: 5px; /* Reduced padding */
+    width: auto; /* Allow the button to size based on content */
+    min-width: 60px; /* Set a minimum width for consistency */
+    font-size: .65rem;
+}
+
+.delete-button:hover {
+    background-color: #e60000; /* Darker red */
+}
+
+a#listAllLink {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    color: #39ff14; /* Neon green */
+    text-align: center;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s;
+    border: 1px solid transparent;
+}
+
+a#listAllLink:hover {
+    color: #2ecc71; /* Slightly darker green */
+    border: 1px solid #2ecc71;
+} 
