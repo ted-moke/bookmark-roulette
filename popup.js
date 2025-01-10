@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const categorySelect = document.getElementById("categorySelect");
+  const rollButton = document.getElementById("rollButton");
+  const resultElement = document.getElementById("result");
 
   // Function to extract tags from a bookmark's URL or title
   function extractTags(bookmark) {
@@ -7,28 +9,32 @@ document.addEventListener("DOMContentLoaded", function () {
     const regex = /tags=([^,]+)/gi;
     let match;
     while ((match = regex.exec(bookmark.title)) !== null) {
-      console.log("match", match);
       tags.push(...match[1].toLowerCase().split(","));
     }
-    console.log("tags in extractTags", tags);
     return tags;
   }
 
   // Function to traverse bookmarks and extract tags
-  function traverseBookmarks(bookmarks, tagsSet = new Set()) {
+  function traverseBookmarks(bookmarks, tagsSet = new Set(), tagCounts = {}) {
     bookmarks.forEach((bookmark) => {
       if (bookmark.children) {
-        traverseBookmarks(bookmark.children, tagsSet);
+        traverseBookmarks(bookmark.children, tagsSet, tagCounts);
       } else if (bookmark.title.includes("tags=")) {
         const tags = extractTags(bookmark);
-        tags.forEach((tag) => tagsSet.add(tag));
+        tags.forEach((tag) => {
+          tagsSet.add(tag);
+          tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+        });
       }
     });
-    return Array.from(tagsSet);
+    return {
+        tags: Array.from(tagsSet),
+        tagCounts
+    };
   }
 
   // Function to populate the dropdown with sorted tags
-  function populateDropdown(tags) {
+  function populateDropdown({tagCounts, tags}) {
     // Sort tags into two groups: "to verb" and others
     const toVerbTags = tags.filter(tag => /^to\s+\w+/.test(tag));
     const otherTags = tags.filter(tag => !/^to\s+\w+/.test(tag));
@@ -47,16 +53,82 @@ document.addEventListener("DOMContentLoaded", function () {
     sortedTags.forEach((tag) => {
       const option = document.createElement("option");
       option.value = tag;
-      option.textContent = tag;
+      option.textContent = `${tag} (${tagCounts[tag]})` ;
       categorySelect.appendChild(option);
     });
   }
 
   // Get all bookmarks and populate the dropdown
   chrome.bookmarks.getTree(function (bookmarks) {
-    console.log("bookmarks", bookmarks);
-    const tags = traverseBookmarks(bookmarks);
-    console.log("tags", tags);
-    populateDropdown(tags);
+    const {tags, tagCounts} = traverseBookmarks(bookmarks);
+    populateDropdown({tagCounts, tags});
+  });
+
+  // Function to find bookmarks with selected tag
+  function findBookmarksWithTag(bookmarks, tag, results = []) {
+    bookmarks.forEach((bookmark) => {
+      if (bookmark.children) {
+        findBookmarksWithTag(bookmark.children, tag, results);
+      } else if (bookmark.title.includes(`tags=${tag}`)) {
+        results.push(bookmark);
+      }
+    });
+    return results;
+  }
+
+  // Handle roll button click
+  rollButton.addEventListener("click", () => {
+    const selectedTag = categorySelect.value;
+    if (!selectedTag) {
+      resultElement.textContent = "Please select a tag first";
+      return;
+    }
+
+    chrome.bookmarks.getTree((bookmarks) => {
+      const matchingBookmarks = findBookmarksWithTag(bookmarks, selectedTag);
+      
+      if (matchingBookmarks.length === 0) {
+        resultElement.textContent = "No bookmarks found with this tag";
+        return;
+      }
+
+      // Pick a random bookmark
+      const randomIndex = Math.floor(Math.random() * matchingBookmarks.length);
+      const chosenBookmark = matchingBookmarks[randomIndex];
+      
+      // Create a clickable link
+      resultElement.innerHTML = `<a href="${chosenBookmark.url}" target="_blank">${chosenBookmark.title}</a>`;
+    });
+  });
+
+  // Add after the roll button event listener
+  const listAllButton = document.getElementById("listAllButton");
+
+  // Handle list all button click
+  listAllButton.addEventListener("click", () => {
+    const selectedTag = categorySelect.value;
+    if (!selectedTag) {
+      resultElement.textContent = "Please select a tag first";
+      return;
+    }
+
+    chrome.bookmarks.getTree((bookmarks) => {
+      const matchingBookmarks = findBookmarksWithTag(bookmarks, selectedTag);
+      
+      if (matchingBookmarks.length === 0) {
+        resultElement.textContent = "No bookmarks found with this tag";
+        return;
+      }
+
+      // Create a list of all matching bookmarks
+      const bookmarksList = matchingBookmarks
+        .map(bookmark => `<li><a href="${bookmark.url}" target="_blank">${bookmark.title}</a></li>`)
+        .join('');
+      
+      resultElement.innerHTML = `
+        <p>Found ${matchingBookmarks.length} bookmark${matchingBookmarks.length === 1 ? '' : 's'}:</p>
+        <ul>${bookmarksList}</ul>
+      `;
+    });
   });
 });
