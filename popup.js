@@ -15,26 +15,20 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Function to traverse bookmarks and extract tags
-  function traverseBookmarks(bookmarks, tagsSet = new Set(), tagCounts = {}) {
+  function traverseBookmarks(bookmarks, tagsSet = new Set()) {
     bookmarks.forEach((bookmark) => {
       if (bookmark.children) {
-        traverseBookmarks(bookmark.children, tagsSet, tagCounts);
+        traverseBookmarks(bookmark.children, tagsSet);
       } else if (bookmark.title.includes("tags=")) {
         const tags = extractTags(bookmark);
-        tags.forEach((tag) => {
-          tagsSet.add(tag);
-          tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-        });
+        tags.forEach((tag) => tagsSet.add(tag));
       }
     });
-    return {
-        tags: Array.from(tagsSet),
-        tagCounts
-    };
+    return Array.from(tagsSet);
   }
 
   // Function to populate the dropdown with sorted tags
-  function populateDropdown({tagCounts, tags}) {
+  function populateDropdown(tags) {
     // Sort tags into two groups: "to verb" and others
     const toVerbTags = tags.filter(tag => /^to\s+\w+/.test(tag));
     const otherTags = tags.filter(tag => !/^to\s+\w+/.test(tag));
@@ -53,15 +47,15 @@ document.addEventListener("DOMContentLoaded", function () {
     sortedTags.forEach((tag) => {
       const option = document.createElement("option");
       option.value = tag;
-      option.textContent = `${tag} (${tagCounts[tag]})` ;
+      option.textContent = tag;
       categorySelect.appendChild(option);
     });
   }
 
   // Get all bookmarks and populate the dropdown
   chrome.bookmarks.getTree(function (bookmarks) {
-    const {tags, tagCounts} = traverseBookmarks(bookmarks);
-    populateDropdown({tagCounts, tags});
+    const tags = traverseBookmarks(bookmarks);
+    populateDropdown(tags);
   });
 
   // Function to find bookmarks with selected tag
