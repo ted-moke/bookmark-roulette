@@ -30,7 +30,18 @@ export function findBookmarksWithTag(bookmarks, searchString, results = []) {
   const lowerCaseSearchString = searchString.toLowerCase();
   bookmarks.forEach((bookmark) => {
     if (bookmark.children) {
-      findBookmarksWithTag(bookmark.children, searchString, results);
+      const titleLowerCase = bookmark.title.toLowerCase();
+      if (titleLowerCase === "archive") {
+        // Skip processing children of "archive" folders
+        return;
+      }
+      if (titleLowerCase.includes(lowerCaseSearchString)) {
+        // If the folder title matches, add all children
+        bookmark.children.forEach(child => results.push(child));
+      } else {
+        // Otherwise, continue searching within children
+        findBookmarksWithTag(bookmark.children, searchString, results);
+      }
     } else {
       const tags = extractTags(bookmark);
       const titleLowerCase = bookmark.title.toLowerCase();
