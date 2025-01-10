@@ -59,13 +59,18 @@ document.addEventListener("DOMContentLoaded", function () {
     populateDropdown(tags);
   });
 
-  // Function to find bookmarks with selected tag
-  function findBookmarksWithTag(bookmarks, tag, results = []) {
+  // Function to find bookmarks with selected tag or matching string
+  function findBookmarksWithTag(bookmarks, searchString, results = []) {
+    const lowerCaseSearchString = searchString.toLowerCase();
     bookmarks.forEach((bookmark) => {
       if (bookmark.children) {
-        findBookmarksWithTag(bookmark.children, tag, results);
-      } else if (bookmark.title.includes(`tags=${tag}`)) {
-        results.push(bookmark);
+        findBookmarksWithTag(bookmark.children, searchString, results);
+      } else {
+        const tags = extractTags(bookmark);
+        const titleLowerCase = bookmark.title.toLowerCase();
+        if (tags.includes(lowerCaseSearchString) || titleLowerCase.includes(lowerCaseSearchString)) {
+          results.push(bookmark);
+        }
       }
     });
     return results;
