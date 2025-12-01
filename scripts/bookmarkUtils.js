@@ -58,6 +58,20 @@ export function findBookmarksWithTag(bookmarks, searchString, results = []) {
   return results;
 }
 
+// Function to get all bookmarks (excluding folders)
+export function getAllBookmarks(bookmarks, results = []) {
+  bookmarks.forEach((bookmark) => {
+    if (bookmark.children) {
+      // Recursively process children
+      getAllBookmarks(bookmark.children, results);
+    } else {
+      // Add bookmark to results
+      results.push(bookmark);
+    }
+  });
+  return results;
+}
+
 // Function to delete a bookmark
 export function deleteBookmark(bookmarkId) {
   chrome.bookmarks.remove(bookmarkId, () => {

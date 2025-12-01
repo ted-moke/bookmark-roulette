@@ -27,7 +27,7 @@ export function populateDropdown(tags, categorySelect) {
 export function createBookmarkListItem(bookmark) {
   return `
     <li>
-      <a href="${bookmark.url}" target="_blank">${bookmark.title}</a>
+      <a href="${bookmark.url}" target="_blank" title="${bookmark.title}">${bookmark.title.substring(0, 50)}${bookmark.title.length > 50 ? '...' : ''}</a>
       <button class="delete-button" data-id="${bookmark.id}">Delete</button>
     </li>
   `;
